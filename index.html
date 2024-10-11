@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sleep Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .header {
+            font-size: 24px;
+            color: #333;
+        }
+        .input-container {
+            margin: 20px;
+        }
+        label, input {
+            margin-right: 10px;
+        }
+        .chart-container {
+            width: 80%;
+            margin: auto;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Sleep Monitoring</h1>
+        </div>
+
+        <!-- Input section -->
+        <div class="input-container">
+            <label for="sleepTime">Sleep Time:</label>
+            <input type="time" id="sleepTime" name="sleepTime">
+            <label for="wakeUpTime">Wake-up Time:</label>
+            <input type="time" id="wakeUpTime" name="wakeUpTime">
+            <button onclick="addSleepData()">Submit</button>
+        </div>
+
+        <!-- Chart section -->
+        <div class="chart-container">
+            <canvas id="sleepChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Initialize data arrays
+        let sleepData = {
+            dates: [],
+            durations: []
+        };
+
+        // Function to calculate sleep duration
+        function calculateSleepDuration(sleepTime, wakeUpTime) {
+            let sleep = new Date(1970-01-01T${sleepTime}:00);
+            let wakeUp = new Date(1970-01-01T${wakeUpTime}:00);
+
+            if (wakeUp < sleep) {
+                wakeUp.setHours(wakeUp.getHours() + 24);
+            }
+
+            const duration = (wakeUp - sleep) / (1000 * 60 * 60); // Convert milliseconds to hours
+            return duration;
+        }
+
+        // Function to add sleep data
+        function addSleepData() {
+            const sleepTime = document.getElementById("sleepTime").value;
+            const wakeUpTime = document.getElementById("wakeUpTime").value;
+
+            if (sleepTime && wakeUpTime) {
+                const duration = calculateSleepDuration(sleepTime,
